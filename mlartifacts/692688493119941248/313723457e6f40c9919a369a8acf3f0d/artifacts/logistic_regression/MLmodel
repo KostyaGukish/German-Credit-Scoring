@@ -1,0 +1,44 @@
+artifact_path: logistic_regression
+flavors:
+  python_function:
+    env:
+      conda: conda.yaml
+      virtualenv: python_env.yaml
+    loader_module: mlflow.sklearn
+    model_path: model.pkl
+    predict_fn: predict
+    python_version: 3.12.4
+  sklearn:
+    code: null
+    pickled_model: model.pkl
+    serialization_format: cloudpickle
+    sklearn_version: 1.4.2
+mlflow_version: 2.18.0
+model_size_bytes: 500434
+model_uuid: a223762427f64fcb8363e2fcf780cf40
+run_id: 313723457e6f40c9919a369a8acf3f0d
+saved_input_example_info:
+  artifact_path: input_example.json
+  pandas_orient: split
+  serving_input_path: serving_input_example.json
+  type: dataframe
+signature:
+  inputs: '[{"type": "string", "name": "checking_acc_status", "required": true}, {"type":
+    "double", "name": "duration", "required": true}, {"type": "string", "name": "cred_hist",
+    "required": true}, {"type": "string", "name": "purpose", "required": true}, {"type":
+    "double", "name": "loan_amt", "required": true}, {"type": "string", "name": "saving_acc_bonds",
+    "required": true}, {"type": "string", "name": "present_employment_since", "required":
+    true}, {"type": "double", "name": "installment_rate", "required": true}, {"type":
+    "string", "name": "personal_stat_gender", "required": true}, {"type": "string",
+    "name": "other_debtors_guarantors", "required": true}, {"type": "double", "name":
+    "present_residence_since", "required": true}, {"type": "string", "name": "property",
+    "required": true}, {"type": "double", "name": "age", "required": true}, {"type":
+    "string", "name": "other_installment_plans", "required": true}, {"type": "string",
+    "name": "housing", "required": true}, {"type": "double", "name": "num_curr_loans",
+    "required": true}, {"type": "string", "name": "job", "required": true}, {"type":
+    "double", "name": "num_people_provide_maint", "required": true}, {"type": "string",
+    "name": "telephone", "required": true}, {"type": "string", "name": "is_foreign_worker",
+    "required": true}]'
+  outputs: '[{"type": "double", "required": true}]'
+  params: null
+utc_time_created: '2024-12-01 16:06:59.992940'

@@ -1,0 +1,14 @@
+aliases: []
+creation_timestamp: 1733069218786
+current_stage: None
+description: ''
+last_updated_timestamp: 1733069218786
+name: dummy_classifier
+run_id: 136158bd1c3b455b94a2da1d009f2a65
+run_link: ''
+source: mlflow-artifacts:/692688493119941248/136158bd1c3b455b94a2da1d009f2a65/artifacts/dummy_classifier
+status: READY
+status_message: null
+storage_location: mlflow-artifacts:/692688493119941248/136158bd1c3b455b94a2da1d009f2a65/artifacts/dummy_classifier
+user_id: null
+version: 1
