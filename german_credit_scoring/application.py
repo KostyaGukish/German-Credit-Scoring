@@ -13,7 +13,7 @@ from ydata_profiling import ProfileReport
 
 import eda
 
-RUN_ID = "ec47c80d2a21439dbc0e7a8dbdecfb54"
+RUN_ID = "61ec9760b6c5404b8bff4b2b0d11cd07"
 MODEL_URI = f"mlflow-artifacts:/692688493119941248/{RUN_ID}/artifacts/XGBClassifier"
 
 
@@ -119,11 +119,10 @@ def explane_data(uploaded_data):
 def explane_row(uploaded_data, row):
     explainer = shap.TreeExplainer(shap_model)
     shap_values = explainer(to_category(uploaded_data))
-
+    
     fig, ax = plt.subplots()
     shap.plots.waterfall(shap_values[row], max_display=25)
     st.pyplot(fig)
-
 
 st.set_page_config(layout="wide", page_title="German credit scoring")
 st.title("German credit scoring")
