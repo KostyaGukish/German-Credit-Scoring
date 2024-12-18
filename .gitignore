@@ -4,6 +4,7 @@ models/
 docs/
 references/
 reports/
+german_credit_scoring/
 
 # Data
 /data/
