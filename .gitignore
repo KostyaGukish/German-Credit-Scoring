@@ -1,5 +1,9 @@
 mlartifacts/
 mlruns/
+models/
+docs/
+references/
+reports/
 
 # Data
 /data/

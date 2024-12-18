@@ -100,7 +100,7 @@ def predict(data):
     return data
 
 @st.cache_data
-def explane_data(uploaded_data):
+def explain_data(uploaded_data):
     explainer = shap.TreeExplainer(shap_model)
     shap_values = explainer(to_category(uploaded_data))
     fig, ax = plt.subplots()
@@ -116,7 +116,7 @@ def explane_data(uploaded_data):
     st.pyplot(fig)
 
 @st.cache_data
-def explane_row(uploaded_data, row):
+def explain_row(uploaded_data, row):
     explainer = shap.TreeExplainer(shap_model)
     shap_values = explainer(to_category(uploaded_data))
     
@@ -164,11 +164,11 @@ if uploaded_file is not None:
     shap1, shap2 = st.tabs(["Entire data", "One row"])
 
     with shap1:
-        explane_data(uploaded_data)
+        explain_data(uploaded_data)
         
     with shap2:
         if (row != -1):
-            explane_row(uploaded_data, row)
+            explain_row(uploaded_data, row)
         else:
             st.markdown("No rows selected.")
 
