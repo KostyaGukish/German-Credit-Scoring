@@ -4,7 +4,12 @@ models/
 docs/
 references/
 reports/
-german_credit_scoring/
+german_credit_scoring/__init__.py
+german_credit_scoring/config.py
+german_credit_scoring/dataset.py
+german_credit_scoring/features.py
+german_credit_scoring/plots.py
+german_credit_scoring/modeling
 
 # Data
 /data/

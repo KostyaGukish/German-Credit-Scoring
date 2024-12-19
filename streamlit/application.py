@@ -1,20 +1,37 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import xgboost as xgb
 import matplotlib.pyplot as plt
-import mlflow
 import copy
 import shap
+import json
+import pickle
 
 from pathlib import Path
 from ydata_profiling import ProfileReport
 
-
 import eda
 
-RUN_ID = "61ec9760b6c5404b8bff4b2b0d11cd07"
-MODEL_URI = f"mlflow-artifacts:/692688493119941248/{RUN_ID}/artifacts/XGBClassifier"
+
+config_path = Path("./config.json").resolve()
+with open(config_path, "r") as file:
+    config = json.load(file)
+
+
+@st.cache_resource
+def load_model():
+    model_info_path = Path("./models").resolve()
+    model_path = model_info_path / "model.pkl"
+    params_path = model_info_path / "params.json"
+
+    with open(model_path, "rb") as f:
+        model = pickle.load(f)
+
+    with open(params_path, "r") as file:
+        params = json.load(file)
+
+    threshold = float(params["threshold"])
+    return model, threshold
 
 
 def convert(value):
@@ -24,17 +41,6 @@ def convert(value):
         return float(value)
 
 
-mlflow.set_tracking_uri("http://localhost:5000")
-mlflow.set_experiment("german-credit-scoring")
-model = mlflow.xgboost.load_model(MODEL_URI)
-run_data = mlflow.get_run(RUN_ID).data.to_dictionary()
-threshold = float(run_data["params"]["threshold"])
-run_data["params"].pop("threshold")
-params = run_data["params"]
-params = {key: convert(value) for key, value in params.items()}
-shap_model = xgb.XGBClassifier(enable_categorical=True, random_state=42, **params)
-
-
 @st.cache_data
 def convert_df(df):
     return df.to_csv().encode("utf-8")
@@ -42,8 +48,6 @@ def convert_df(df):
 
 @st.cache_data
 def show_profile(data):
-    data_path = Path("data/raw/german_credit_cleaned.csv").resolve()
-    data = pd.read_csv(data_path)
     profile = ProfileReport(data, title="Profiling Report")
     html_content = profile.to_html()
     st.components.v1.html(html_content, height=800, scrolling=True)
@@ -53,12 +57,11 @@ def show_profile(data):
 def show_numerical_statistics(data):
     for c in eda.NUM_COLS:
         fig1, fig2 = eda.numerical_plot(data, c, 20)
-        st.subheader(c)
+        st.subheader(config["features"][c]["info"])
         st.plotly_chart(fig1, theme=None, use_container_width=True)
         st.plotly_chart(fig2, theme=None, use_container_width=True)
 
-    for c in eda.NUM_COLS:
-        st.subheader(c)
+        st.subheader(config["features"][c]["info"])
         fig = eda.box_plot(data, c)
         st.plotly_chart(fig, theme=None, use_container_width=True)
 
@@ -67,7 +70,7 @@ def show_numerical_statistics(data):
 def show_categorical_statistics(data):
     for c in eda.CAT_COLS:
         fig = eda.get_percentages(data, c)
-        st.subheader(c)
+        st.subheader(config["features"][c]["info"])
         st.plotly_chart(fig, theme=None, use_container_width=True)
 
 
@@ -99,9 +102,10 @@ def predict(data):
     data["target"] = predictions
     return data
 
+
 @st.cache_data
 def explain_data(uploaded_data):
-    explainer = shap.TreeExplainer(shap_model)
+    explainer = shap.TreeExplainer(model)
     shap_values = explainer(to_category(uploaded_data))
     fig, ax = plt.subplots()
     shap.plots.beeswarm(shap_values)
@@ -115,36 +119,30 @@ def explain_data(uploaded_data):
     shap.plots.heatmap(shap_values, instance_order=shap_values.sum(1))
     st.pyplot(fig)
 
+
 @st.cache_data
 def explain_row(uploaded_data, row):
-    explainer = shap.TreeExplainer(shap_model)
+    explainer = shap.TreeExplainer(model)
     shap_values = explainer(to_category(uploaded_data))
-    
+
     fig, ax = plt.subplots()
     shap.plots.waterfall(shap_values[row], max_display=25)
     st.pyplot(fig)
 
+
 st.set_page_config(layout="wide", page_title="German credit scoring")
 st.title("German credit scoring")
-
-
-data_path = Path("data/raw/german_credit_cleaned.csv").resolve()
-data = pd.read_csv(data_path)
-data["target"] = data["target"] == "good"
-data["target"] = data["target"].astype("int")
-X = data.drop(columns=["target"])
-y = data["target"]
-shap_model.fit(to_category(X), y)
-
 st.sidebar.header("Upload and download :gear:")
+
+model, threshold = load_model()
+
 uploaded_file = st.sidebar.file_uploader("Upload a data", type=["csv"])
 
 if uploaded_file is not None:
-    uploaded_data = pd.read_csv(uploaded_file)
-    uploaded_data = uploaded_data.drop(columns="target")
+    uploaded_data = pd.read_csv(uploaded_file).drop(columns="target")
 
     predicted_data = copy.deepcopy(uploaded_data)
-    predicted_data = predict(uploaded_data)
+    predicted_data = predict(predicted_data)
     st.header("My data :books:")
 
     event = st.dataframe(
@@ -165,9 +163,9 @@ if uploaded_file is not None:
 
     with shap1:
         explain_data(uploaded_data)
-        
+
     with shap2:
-        if (row != -1):
+        if row != -1:
             explain_row(uploaded_data, row)
         else:
             st.markdown("No rows selected.")
@@ -181,6 +179,11 @@ if uploaded_file is not None:
     )
 
 st.header("Data Statistics :bar_chart:")
+
+data_path = Path("data/raw/german_credit_cleaned.csv").resolve()
+data = pd.read_csv(data_path)
+data["target"] = data["target"] == "good"
+data["target"] = data["target"].astype("int")
 
 tab1, tab2, tab3 = st.tabs(
     [

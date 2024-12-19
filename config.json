@@ -1,0 +1,70 @@
+{
+    "run_id": "61ec9760b6c5404b8bff4b2b0d11cd07",
+    "experiment_id": "692688493119941248",
+    "features": {
+        "checking_acc_status": {
+            "info": "Status of existing checking account"
+        },
+        "duration": {
+            "info": "Agreed Loan Duration in months",
+            "x": "duration"
+        },
+        "cred_hist": {
+            "info": "Credit history status",
+            "x": ""
+        },
+        "purpose": {
+            "info": "Loan Request Purpose"
+        },
+        "loan_amt": {
+            "info": "Credit amount"
+        },
+        "saving_acc_bonds": {
+            "info": "Credit amount"
+        },
+        "present_employment_since": {
+            "info": "Present employment since"
+        },
+        "installment_rate": {
+            "info": "Installment rate in percentage of disposable income"
+        },
+        "personal_stat_gender": {
+            "info": "Personal status and sex"
+        },
+        "other_debtors_guarantors": {
+            "info": "Other debtors guarantors"
+        },
+        "present_residence_since": {
+            "info": "Present residence since"
+        },
+        "property": {
+            "info": "Property"
+        },
+        "age": {
+            "info": "Age"
+        },
+        "other_installment_plans": {
+            "info": "Other installment plans"
+        },
+        "housing": {
+            "info": "Housing"
+        },
+        "num_curr_loans": {
+            "info": "Number of existing credits at this bank"
+        },
+        "job": {
+            "info": "Job"
+        },
+        "num_people_provide_maint": {
+            "info": "Number of people being liable to provide maintenance for"
+        },
+        "telephone": {
+            "info": "Telephone"
+        },
+        "is_foreign_worker": {
+            "info": "Indicates whether the individual is a foreign worker"
+        }
+        
+    }
+  }
+  

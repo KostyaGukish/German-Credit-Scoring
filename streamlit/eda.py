@@ -6,6 +6,10 @@ from copy import deepcopy
 import plotly.graph_objects as go
 import plotly.express as px
 
+import json
+
+with open("./config.json", "r") as file:
+    config = json.load(file)
 
 CAT_COLS = [
     "checking_acc_status",
@@ -21,7 +25,6 @@ CAT_COLS = [
     "job",
     "telephone",
     "is_foreign_worker",
-    
     "installment_rate",
     "present_residence_since",
     "num_curr_loans",
@@ -37,6 +40,9 @@ NUM_COLS = [
     # "num_curr_loans", # 4 unique
     # "num_people_provide_maint", # 2 unique
 ]
+
+line_name = "Probability of 'good' outcomes for the entire dataset"
+bar_name = "Probability of 'good' outcomes for the column"
 
 
 def get_percentages(data, column):
@@ -61,17 +67,22 @@ def get_percentages(data, column):
         go.Bar(
             x=temp[column],
             y=temp["value"],
-        )
+            name=bar_name,
+        ),
     )
 
     fig.add_trace(
         go.Scatter(
-            x=temp[column], y=[good] * len(temp[column]), mode="lines", name="Line"
+            x=temp[column], y=[good] * len(temp[column]), mode="lines", name=line_name
         )
     )
 
-    return fig
+    fig.update_layout(
+        yaxis=dict(title=dict(text="Probability")),
+        xaxis=dict(title=dict(text=config["features"][column]["info"])),
+    )
 
+    return fig
 
 
 def numerical_plot(data, column, n_bins):
@@ -83,7 +94,7 @@ def numerical_plot(data, column, n_bins):
 
         for num in a:
             interval_index = (num - mn + 1) // size
-            interval_counts[interval_index] += 1    
+            interval_counts[interval_index] += 1
 
         sorted_counts = dict(sorted(interval_counts.items()))
         return pd.Series(sorted_counts)
@@ -134,27 +145,27 @@ def numerical_plot(data, column, n_bins):
     fig1.update_layout(
         height=550,
         width=1150,
+        yaxis=dict(title=dict(text="Frequency")),
+        xaxis=dict(title=dict(text=config["features"][column]["info"])),
     )
 
     fig2 = go.Figure()
 
     fig2.add_trace(
-        go.Bar(
-            x=x,
-            y=result.values,
-        )
+        go.Bar(x=x, y=result.values, name=bar_name),
     )
 
-    fig2.add_trace(go.Scatter(x=x, y=[good] * x.size, mode="lines", name="Line"))
+    fig2.add_trace(go.Scatter(x=x, y=[good] * x.size, mode="lines", name=line_name))
 
     fig2.update_layout(
         width=1150,
+        yaxis=dict(title=dict(text="Probability")),
+        xaxis=dict(title=dict(text=config["features"][column]["info"])),
     )
 
     return fig1, fig2
 
+
 def box_plot(data, column):
     fig = px.box(data, x="target", y=column)
     return fig
-
-
