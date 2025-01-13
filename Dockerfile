@@ -13,8 +13,6 @@ RUN apt-get update -qq && apt-get install -y \
 COPY . .
 
 RUN pip3 install -r requirements.txt
-# RUN pip3 install -r requirements.txt
-# conda create --name <env> --file <this file>
 
 EXPOSE 8501
 

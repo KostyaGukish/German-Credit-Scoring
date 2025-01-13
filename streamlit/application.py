@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import copy
 import shap
 import json
-import pickle
+import mlflow
 
 from pathlib import Path
 from ydata_profiling import ProfileReport
@@ -20,17 +20,16 @@ with open(config_path, "r") as file:
 
 @st.cache_resource
 def load_model():
-    model_info_path = Path("./models").resolve()
-    model_path = model_info_path / "model.pkl"
-    params_path = model_info_path / "params.json"
+    RUN_ID = config["run_id"]
+    EXP_ID = config["experiment_id"]
+    MODEL_URI = f"mlflow-artifacts:/{EXP_ID}/{RUN_ID}/artifacts/XGBClassifier"
 
-    with open(model_path, "rb") as f:
-        model = pickle.load(f)
-
-    with open(params_path, "r") as file:
-        params = json.load(file)
-
-    threshold = float(params["threshold"])
+    mlflow.set_tracking_uri("http://localhost:5000")
+    mlflow.set_experiment("german-credit-scoring")
+    run_data = mlflow.get_run(RUN_ID).data.to_dictionary()
+    model = mlflow.xgboost.load_model(MODEL_URI)
+    model = model.set_params(enable_categorical=True)
+    threshold = float(run_data["params"]["threshold"])
     return model, threshold
 
 
