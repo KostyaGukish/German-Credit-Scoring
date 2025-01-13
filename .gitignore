@@ -12,7 +12,9 @@ german_credit_scoring/plots.py
 german_credit_scoring/modeling
 
 # Data
-/data/
+/data/external
+/data/interim
+/data/processed
 
 # Mac OS-specific storage files
 .DS_Store
