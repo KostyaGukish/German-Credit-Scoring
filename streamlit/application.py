@@ -13,6 +13,7 @@ from ydata_profiling import ProfileReport
 import eda
 
 
+data_path = Path("data/raw/german_credit_cleaned.csv").resolve()
 config_path = Path("./config.json").resolve()
 with open(config_path, "r") as file:
     config = json.load(file)
@@ -136,10 +137,29 @@ st.sidebar.header("Upload and download :gear:")
 
 model, threshold = load_model()
 
-uploaded_file = st.sidebar.file_uploader("Upload a data", type=["csv"])
+if 'uploader_key' not in st.session_state:
+    st.session_state.uploader_key = 0
+if "uploaded_file" not in st.session_state:
+    st.session_state.uploaded_file = None
 
-if uploaded_file is not None:
-    uploaded_data = pd.read_csv(uploaded_file).drop(columns="target")
+def update_key():
+    st.session_state.uploader_key += 1
+
+
+url = "https://www.kaggle.com/datasets/elsnkazm/german-credit-scoring-data/data"
+st.sidebar.subheader("Upload the data in the format shown [here](%s)" % url)
+file_uploader_input = st.sidebar.file_uploader("", type=["csv"], key=f"uploader_{st.session_state.uploader_key}", label_visibility="collapsed")
+
+st.sidebar.subheader("or see how the program works with the demo data")
+but = st.sidebar.button("Browse demo file", on_click=update_key)
+if but:
+    st.session_state.uploaded_file = data_path
+    file_uploader_input = None
+elif file_uploader_input is not None:
+    st.session_state.uploaded_file = file_uploader_input
+
+if st.session_state.uploaded_file is not None:
+    uploaded_data = pd.read_csv(st.session_state.uploaded_file).drop(columns="target")
 
     predicted_data = copy.deepcopy(uploaded_data)
     predicted_data = predict(predicted_data)
@@ -180,7 +200,6 @@ if uploaded_file is not None:
 
 st.header("Data Statistics :bar_chart:")
 
-data_path = Path("data/raw/german_credit_cleaned.csv").resolve()
 data = pd.read_csv(data_path)
 data["target"] = data["target"] == "good"
 data["target"] = data["target"].astype("int")
