@@ -1,6 +1,6 @@
 mlartifacts/
 mlruns/
-models/
+# models/
 docs/
 references/
 reports/

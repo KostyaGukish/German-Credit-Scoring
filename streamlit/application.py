@@ -2,10 +2,10 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import xgboost as xgb
 import copy
 import shap
 import json
-import mlflow
 
 from pathlib import Path
 from ydata_profiling import ProfileReport
@@ -20,16 +20,17 @@ with open(config_path, "r") as file:
 
 @st.cache_resource
 def load_model():
-    RUN_ID = config["run_id"]
-    EXP_ID = config["experiment_id"]
-    MODEL_URI = f"mlflow-artifacts:/{EXP_ID}/{RUN_ID}/artifacts/XGBClassifier"
+    model_info_path = Path("./models").resolve()
+    model_path = model_info_path / "model.xgb"
+    threshold = model_info_path / "threshold.txt"
 
-    mlflow.set_tracking_uri("http://localhost:5000")
-    mlflow.set_experiment("german-credit-scoring")
-    run_data = mlflow.get_run(RUN_ID).data.to_dictionary()
-    model = mlflow.xgboost.load_model(MODEL_URI)
-    model = model.set_params(enable_categorical=True)
-    threshold = float(run_data["params"]["threshold"])
+    model = xgb.XGBClassifier()
+    model.load_model(model_path)
+    model.set_params(enable_categorical=True)
+
+    with open(threshold, "r") as file:
+        threshold = json.load(file)
+
     return model, threshold
 
 
