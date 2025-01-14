@@ -9,6 +9,15 @@ https://german-credit-scoring.streamlit.app
 ## Dataset
 This project uses the [German Credit Data dataset](https://www.kaggle.com/datasets/elsnkazm/german-credit-scoring-data), which contains information about 1,000 borrowers and 20 variables describing their characteristics.
 
+## Tools and Technologies
+During the project, several tools and technologies were used, including:
+
+ - **MLflow**: For tracking experiments, managing models, and facilitating reproducibility throughout the machine learning workflow.
+ - **Python**: For data processing, modeling, and application development.
+ - **Streamlit**: To create an interactive web application for showcasing the model.
+ - **Docker**: To containerize the application for consistent deployment across environments.
+ - **Cookiecutter Data Science**: For structuring the project following best practices for data science workflows.
+
 ## Project Structure
 `data/raw/`: Original raw data.
 
@@ -24,17 +33,8 @@ This project uses the [German Credit Data dataset](https://www.kaggle.com/datase
 
 `Dockerfile`: Instructions to build the Docker image.
 
-## Tools and Technologies
-During the project, several tools and technologies were used, including:
-
- - **MLflow**: For tracking experiments, managing models, and facilitating reproducibility throughout the machine learning workflow.
- - **Python**: For data processing, modeling, and application development.
- - **Streamlit**: To create an interactive web application for showcasing the model.
- - **Docker**: To containerize the application for consistent deployment across environments.
- - **Cookiecutter Data Science**: For structuring the project following best practices for data science workflows.
-
 ## Requirements
-Python 3.12
-Dependencies listed in requirements.txt
+ - Python 3.12
+ - Dependencies listed in `requirements.txt`
 
 
