@@ -1,61 +1,40 @@
-# german credit scoring
+# German credit scoring
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+This project focuses on developing a machine learning model to evaluate the creditworthiness of clients using the [German Credit Data dataset](https://www.kaggle.com/datasets/elsnkazm/german-credit-scoring-data). The goal is to predict whether a borrower is a good or bad credit risk, assisting financial institutions in making loan approval decisions.
 
-Classifying people, described by a set of attributes, as reliable or unreliable borrowers.
+## Live Application
+The project includes a live interactive web application built with Streamlit, which allows users to explore the model and test its predictions. You can access the application here:
+https://german-credit-scoring.streamlit.app
 
-## Project Organization
+## Dataset
+This project uses the [German Credit Data dataset](https://www.kaggle.com/datasets/elsnkazm/german-credit-scoring-data), which contains information about 1,000 borrowers and 20 variables describing their characteristics.
 
-```
-├── LICENSE            <- Open-source license if one is chosen
-├── Makefile           <- Makefile with convenience commands like `make data` or `make train`
-├── README.md          <- The top-level README for developers using this project.
-├── data
-│   ├── external       <- Data from third party sources.
-│   ├── interim        <- Intermediate data that has been transformed.
-│   ├── processed      <- The final, canonical data sets for modeling.
-│   └── raw            <- The original, immutable data dump.
-│
-├── docs               <- A default mkdocs project; see www.mkdocs.org for details
-│
-├── models             <- Trained and serialized models, model predictions, or model summaries
-│
-├── notebooks          <- Jupyter notebooks. Naming convention is a number (for ordering),
-│                         the creator's initials, and a short `-` delimited description, e.g.
-│                         `1.0-jqp-initial-data-exploration`.
-│
-├── pyproject.toml     <- Project configuration file with package metadata for 
-│                         german_credit_scoring and configuration for tools like black
-│
-├── references         <- Data dictionaries, manuals, and all other explanatory materials.
-│
-├── reports            <- Generated analysis as HTML, PDF, LaTeX, etc.
-│   └── figures        <- Generated graphics and figures to be used in reporting
-│
-├── requirements.txt   <- The requirements file for reproducing the analysis environment, e.g.
-│                         generated with `pip freeze > requirements.txt`
-│
-├── setup.cfg          <- Configuration file for flake8
-│
-└── german_credit_scoring   <- Source code for use in this project.
-    │
-    ├── __init__.py             <- Makes german_credit_scoring a Python module
-    │
-    ├── config.py               <- Store useful variables and configuration
-    │
-    ├── dataset.py              <- Scripts to download or generate data
-    │
-    ├── features.py             <- Code to create features for modeling
-    │
-    ├── modeling                
-    │   ├── __init__.py 
-    │   ├── predict.py          <- Code to run model inference with trained models          
-    │   └── train.py            <- Code to train models
-    │
-    └── plots.py                <- Code to create visualizations
-```
+## Project Structure
+`data/raw/`: Original raw data.
 
---------
+`models/`: Saved model and params.
+
+`notebooks/`: Jupyter notebooks used for exploratory data analysis (EDA), training a baseline model, hyperparameter tuning and training the final XGBoost model.
+
+`streamlit/`: Files for the Streamlit web application.
+
+`config.json`: Configuration parameters for the project.
+
+`requirements.txt`: Python dependencies.
+
+`Dockerfile`: Instructions to build the Docker image.
+
+## Tools and Technologies
+During the project, several tools and technologies were used, including:
+
+ - **MLflow**: For tracking experiments, managing models, and facilitating reproducibility throughout the machine learning workflow.
+ - **Python**: For data processing, modeling, and application development.
+ - **Streamlit**: To create an interactive web application for showcasing the model.
+ - **Docker**: To containerize the application for consistent deployment across environments.
+ - **Cookiecutter Data Science**: For structuring the project following best practices for data science workflows.
+
+## Requirements
+Python 3.12
+Dependencies listed in requirements.txt
+
 
